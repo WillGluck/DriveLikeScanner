@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">DriveLikeScanner</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+    <string name="error_msg_camera_unavaliable">Câmera não disponível. Em uso ou não existe: \n%1$s!</string>
+    <string name="error_msg_setting_camera_preview">Erro ao setar preview da câmera: \n%1$s!</string>
+
+</resources>
