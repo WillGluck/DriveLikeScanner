@@ -3,8 +3,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ok">OK</string>
 
-
+    <string name="alert_dialog_title">Importante</string>
+    <string name="alert_dialog_camera_permission_message">Para a utilização do digitalizador é necessário liberar a utilização da câmera para a aplicação</string>
 
     <string name="error_msg_camera_unavaliable">Câmera não disponível. Em uso ou não existe: \n%1$s!</string>
     <string name="error_msg_setting_camera_preview">Erro ao setar preview da câmera: \n%1$s!</string>

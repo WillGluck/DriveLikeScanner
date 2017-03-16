@@ -14,10 +14,10 @@ public class Utils {
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
-    public static Camera getCameraInstance(Context context) {
+    public static Camera getCameraInstance(Context context, Integer cameraId) {
         Camera c = null;
         try {
-            c = Camera.open();
+            c = Camera.open(cameraId);
         } catch (Exception e) {
             Log.e(Constants.TAG, context.getString(R.string.error_msg_camera_unavaliable, e.getMessage()));
         }
