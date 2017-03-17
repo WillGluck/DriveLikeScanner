@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/collected_crop"
+        android:icon="@drawable/ic_crop_white_24px"
+        android:title="@string/collected_menu_crop"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/collected_edit"
+        android:icon="@drawable/ic_palette_white_24px"
+        android:title="@string/collected_menu_edit"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/collected_remove"
+        android:title="@string/collected_menu_remove"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/collected_rename"
+        android:title="@string/collected_menu_rename"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/collected_rotate"
+        android:title="@string/collected_menu_rotate"
+        app:showAsAction="never"/>
+
+</menu>

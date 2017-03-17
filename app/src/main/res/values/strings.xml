@@ -10,5 +10,15 @@
 
     <string name="error_msg_camera_unavaliable">Câmera não disponível. Em uso ou não existe: \n%1$s!</string>
     <string name="error_msg_setting_camera_preview">Erro ao setar preview da câmera: \n%1$s!</string>
+    <string name="error_msg_saving_temp_file">Erro ao tentar salvar a foto no armazenamento interno: \n%1$s!</string>
+    <string name="error_msg_closing_file_output_stream">Erro ao fechar o FileOutputStream: \n%1$s!</string>
+    <string name="error_msg_file_not_found">Arquivo não encontrado ao carregar edição: \n%1$s!</string>
+
+    <string name="collected_menu_crop">Recortar</string>
+    <string name="collected_menu_edit">Editar</string>
+    <string name="collected_menu_remove">Excluir página</string>
+    <string name="collected_menu_rename">Renomear</string>
+    <string name="collected_menu_rotate">Girar página</string>
+    <string name="collected_menu_configurations">Configurações</string>
 
 </resources>

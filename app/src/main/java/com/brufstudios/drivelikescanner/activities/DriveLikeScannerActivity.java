@@ -3,6 +3,7 @@ package com.brufstudios.drivelikescanner.activities;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -19,6 +21,10 @@ import android.widget.LinearLayout;
 import com.brufstudios.drivelikescanner.R;
 import com.brufstudios.drivelikescanner.common.CameraManager;
 import com.brufstudios.drivelikescanner.common.Constants;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.UUID;
 
 public class DriveLikeScannerActivity extends AppCompatActivity implements View.OnClickListener, CameraManager.CameraManagerListener {
 
@@ -167,9 +173,27 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
 
     @Override
     public void handleImage(byte[] data) {
-        Intent intent = new Intent(this, DriveLikeEditorActivity.class);
-        intent.putExtra(DriveLikeEditorActivity.IMAGE_PARAM, data);
-        startActivity(intent);
+        FileOutputStream fos = null;
+        try {
 
+            //TODO verificar um jeito de salvar a imagem rotacionada corretamente
+
+            String fileName = UUID.randomUUID().toString();
+            fos = openFileOutput(fileName, Context.MODE_PRIVATE);
+            fos.write(data);
+            Intent intent = new Intent(this, DriveLikeEditorActivity.class);
+            intent.putExtra(DriveLikeEditorActivity.IMAGE_NAME_PARAM, fileName);
+            startActivity(intent);
+
+        } catch (Exception e) {
+            Log.e(Constants.TAG, getString(R.string.error_msg_saving_temp_file, e.getMessage()));
+        }  finally {
+            try {
+                if (null != fos)
+                    fos.close();
+            } catch (IOException e) {
+                Log.e(Constants.TAG, getString(R.string.error_msg_closing_file_output_stream, e.getMessage()));
+            }
+        }
     }
 }

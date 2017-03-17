@@ -1,14 +1,10 @@
 package com.brufstudios.drivelikescanner.common;
 
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
-import android.view.Display;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.brufstudios.drivelikescanner.R;
@@ -42,6 +38,8 @@ public class CameraManager <ActivityListener extends Activity & CameraManager.Ca
         previewContainer.addView(this);
 
         camera = Utils.getCameraInstance(getContext(), selectedCamera);
+        camera.setDisplayOrientation(90);
+
         if (null != camera) {
             holder.addCallback(this);
             holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -93,27 +91,6 @@ public class CameraManager <ActivityListener extends Activity & CameraManager.Ca
         }
     }
 
-    private void configureRotation() {
-
-        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
-        switch (display.getRotation()) {
-            case Surface.ROTATION_0:
-                this.camera.setDisplayOrientation(90);
-                break;
-            case Surface.ROTATION_90:
-                break;
-            case Surface.ROTATION_180:
-                this.camera.setDisplayOrientation(270);
-                break;
-            case Surface.ROTATION_270:
-                this.camera.setDisplayOrientation(180);
-                break;
-            default:
-                break;
-        }
-    }
-
     public void release() {
         camera.release();
         holder.removeCallback(this);
@@ -129,15 +106,6 @@ public class CameraManager <ActivityListener extends Activity & CameraManager.Ca
 
         if (this.holder.getSurface() == null)
             return;
-
-        try {
-            camera.stopPreview();
-        } catch (Exception e) {
-            //Ignorar
-        }
-
-        configureRotation();
-        startCamera();
     }
 
     @Override

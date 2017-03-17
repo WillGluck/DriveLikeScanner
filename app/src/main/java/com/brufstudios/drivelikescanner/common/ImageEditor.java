@@ -3,20 +3,20 @@ package com.brufstudios.drivelikescanner.common;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImageEditor {
+    File file;
 
-    Mat image;
-
-    public ImageEditor(byte[] data) {
-        image = new MatOfByte(data);
+    public ImageEditor(File file) {
+        this.file = file;
     }
 
     public void perspectiveTransform() {
@@ -32,8 +32,9 @@ public class ImageEditor {
 //        Imgproc.warpPerspective(image, transformed);
     }
 
-    public byte[] test() {
+    public void test() {
 
+        Mat image = Imgcodecs.imread(file.getAbsolutePath());
         Mat gray = new Mat();
         Mat binary = new Mat();
         Mat finalImage = new Mat();
@@ -62,9 +63,8 @@ public class ImageEditor {
         gray.copyTo(finalImage, maskImage);
         finalImage.convertTo(finalImage, -1, 1.1, 0);
 
-        byte[] return_buff = new byte[(int) (finalImage.total() * finalImage.channels())];
-        finalImage.get(0, 0, return_buff);
-        return return_buff;
+        Imgcodecs.imwrite(file.getPath(), finalImage);
+
     }
 
 
