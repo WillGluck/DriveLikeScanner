@@ -1,8 +1,6 @@
 package com.brufstudios.drivelikescanner.activities;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import com.brufstudios.drivelikescanner.R;
 import com.brufstudios.drivelikescanner.common.CameraManager;
@@ -26,11 +23,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-public class DriveLikeScannerActivity extends AppCompatActivity implements View.OnClickListener, CameraManager.CameraManagerListener {
+public class ScannerActivity extends AppCompatActivity implements View.OnClickListener, CameraManager.CameraManagerListener {
 
     private CameraManager cameraManager;
     private Boolean rearCamera = true;
     private Boolean flashOff = true;
+
+    public static String PARAM_IMAGE_NAME = "com.brufstudios.drivelikescanner.ScannerActivity.PARAM_IMAGE_NAME";
+    public static String PARAM_SHOW_WARNING = "com.brufstudios.drivelikescanner.ScannerActivity.PARAM_SHOW_WARNING";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,13 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
     protected void onResume() {
         super.onResume();
         configCamera();
+    }
+
+    private void configCamera() {
+        cameraManager = new CameraManager(this);
+        if (!cameraManager.init()) {
+            finish();
+        }
     }
 
     private Boolean hasCameraPermission() {
@@ -77,32 +84,31 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
     }
 
     private void configActivity() {
-        hideLoadingScreen();
+        //hideLoadingScreen();
         configButtons();
     }
 
-    private void hideLoadingScreen() {
-        final LinearLayout loadingLayer = (LinearLayout) findViewById(R.id.loadingScreen);
-        Integer shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
-        loadingLayer.animate().alpha(0.0f).setDuration(shortAnimationDuration).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                loadingLayer.setVisibility(View.GONE);
-            }
-        });
-    }
+//    private void hideLoadingScreen() {
+//        final LinearLayout loadingLayer = (LinearLayout) findViewById(R.id.loadingScreen);
+//        Integer shortAnimationDuration = getResources().getInteger(android.R.integer.config_shortAnimTime);
+//        loadingLayer.animate().alpha(0.0f).setDuration(shortAnimationDuration).setListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                loadingLayer.setVisibility(View.GONE);
+//            }
+//        });
+//    }
+//
+//    private void showLoadingScreen() {
+//        LinearLayout loadingLayer = (LinearLayout) findViewById(R.id.loadingScreen);
+//        loadingLayer.setAlpha(1.0f);
+//        loadingLayer.setVisibility(View.VISIBLE);
+//    }
 
-    private void showLoadingScreen() {
-        LinearLayout loadingLayer = (LinearLayout) findViewById(R.id.loadingScreen);
-        loadingLayer.setAlpha(1.0f);
-        loadingLayer.setVisibility(View.VISIBLE);
-    }
-
-    private void configCamera() {
-        cameraManager = new CameraManager(this);
-        if (!cameraManager.init()) {
-            finish();
-        }
+    private void configButtons() {
+        configToggleButtons( R.id.camera_flash_toggle, PackageManager.FEATURE_CAMERA_FLASH);
+        configToggleButtons( R.id.camera_toggle, PackageManager.FEATURE_CAMERA_FRONT);
+        findViewById(R.id.camera_take_picture).setOnClickListener(this);
     }
 
     @Override
@@ -114,12 +120,6 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
                 finish();
             }
         }
-    }
-
-    private void configButtons() {
-        configToggleButtons( R.id.camera_flash_toggle, PackageManager.FEATURE_CAMERA_FLASH);
-        configToggleButtons( R.id.camera_toggle, PackageManager.FEATURE_CAMERA_FRONT);
-        findViewById(R.id.camera_take_picture).setOnClickListener(this);
     }
 
     private void configToggleButtons(Integer buttonId, String feature) {
@@ -140,7 +140,7 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
         switch (v.getId()) {
             case R.id.camera_take_picture:
                 cameraManager.takePicture();
-                showLoadingScreen();
+                //showLoadingScreen();
                 break;
             case R.id.camera_flash_toggle:
                 flashOff = !flashOff;
@@ -181,9 +181,12 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
             String fileName = UUID.randomUUID().toString();
             fos = openFileOutput(fileName, Context.MODE_PRIVATE);
             fos.write(data);
-            Intent intent = new Intent(this, DriveLikeEditorActivity.class);
-            intent.putExtra(DriveLikeEditorActivity.IMAGE_NAME_PARAM, fileName);
-            startActivity(intent);
+
+            Intent intent = new Intent(this, EditorActivity.class);
+            intent.putExtra(EditorActivity.PARAM_IMAGE_NAME, fileName);
+
+            setResult(RESULT_OK, intent);
+            finish();
 
         } catch (Exception e) {
             Log.e(Constants.TAG, getString(R.string.error_msg_saving_temp_file, e.getMessage()));
@@ -195,5 +198,11 @@ public class DriveLikeScannerActivity extends AppCompatActivity implements View.
                 Log.e(Constants.TAG, getString(R.string.error_msg_closing_file_output_stream, e.getMessage()));
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

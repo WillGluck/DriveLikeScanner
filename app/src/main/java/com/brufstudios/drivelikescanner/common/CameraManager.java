@@ -38,9 +38,9 @@ public class CameraManager <ActivityListener extends Activity & CameraManager.Ca
         previewContainer.addView(this);
 
         camera = Utils.getCameraInstance(getContext(), selectedCamera);
-        camera.setDisplayOrientation(90);
 
         if (null != camera) {
+            camera.setDisplayOrientation(90);
             holder.addCallback(this);
             holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
             return true;
@@ -92,7 +92,8 @@ public class CameraManager <ActivityListener extends Activity & CameraManager.Ca
     }
 
     public void release() {
-        camera.release();
+        if (null != camera)
+            camera.release();
         holder.removeCallback(this);
     }
 
