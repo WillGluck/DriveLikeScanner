@@ -1,6 +1,6 @@
 package com.brufstudios.drivelikescanner.common;
 
-import android.app.Activity;
+import android.content.Context;
 import android.hardware.Camera;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -10,32 +10,30 @@ import android.widget.FrameLayout;
 import com.brufstudios.drivelikescanner.R;
 import com.brufstudios.drivelikescanner.utils.Utils;
 
-public class CameraManager <ActivityListener extends Activity & CameraManager.CameraManagerListener>
-        extends SurfaceView
-        implements SurfaceHolder.Callback,  Camera.PictureCallback {
+public class CameraManager <Listener extends CameraManager.CameraManagerListener> extends SurfaceView implements SurfaceHolder.Callback,  Camera.PictureCallback {
 
     public interface CameraManagerListener {
         void handleImage(byte[] data);
     }
 
-    private ActivityListener listener;
+    private Listener listener;
     private Camera camera;
+    private FrameLayout container;
     private SurfaceHolder holder;
     private Integer selectedCamera;
 
-    public CameraManager(ActivityListener activity) {
-
-        super(activity);
-        listener = activity;
+    public CameraManager(Context context, Listener listener, FrameLayout container) {
+        super(context);
+        this.listener = listener;
+        this.container = container;
         holder = getHolder();
         selectedCamera = Camera.CameraInfo.CAMERA_FACING_BACK;
     }
 
     public Boolean init() {
 
-        FrameLayout previewContainer = (FrameLayout) listener.findViewById(R.id.camera_preview);
-        previewContainer.removeAllViews();
-        previewContainer.addView(this);
+        container.removeAllViews();
+        container.addView(this);
 
         camera = Utils.getCameraInstance(getContext(), selectedCamera);
 

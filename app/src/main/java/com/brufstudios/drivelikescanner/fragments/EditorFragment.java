@@ -1,47 +1,40 @@
 package com.brufstudios.drivelikescanner.fragments;
 
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.brufstudios.drivelikescanner.R;
 
-public class EditorFragment extends Fragment {
+public class EditorFragment extends Fragment implements View.OnClickListener {
 
-    private String SAVED_SELECTED_FILE = "bundleSelectedFile";
-    public static String PARAM_IMAGE_NAME = "com.brufstudios.drivelikescanner.EditorFragment.IMAGE_NAME";
-
+    private View view;
     private EditorFragmentListener listener;
-    private String selectedFile;
 
-    public EditorFragment() { }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (null != getArguments()) {
-            selectedFile = getArguments().getString(PARAM_IMAGE_NAME);
-        }
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_editor, container, false);
+        configFragment();
+        return view;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_editor, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        selectedFile = savedInstanceState.getString(SAVED_SELECTED_FILE);
+    public void onResume() {
+        super.onResume();
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        activity.getSupportActionBar().show();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putString(SAVED_SELECTED_FILE, selectedFile);
         super.onSaveInstanceState(outState);
     }
 
@@ -61,8 +54,33 @@ public class EditorFragment extends Fragment {
         listener = null;
     }
 
-    public interface EditorFragmentListener {
-
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.editor_add_another_image:
+                listener.callCamera();
+                break;
+            case R.id.editor_retake_image:
+                listener.callCamera();
+                break;
+            case R.id.editor_finish:
+                listener.finishActivity();
+                break;
+        }
     }
 
+    private void configFragment() {
+        loadListeners();
+    }
+
+    private void loadListeners() {
+        view.findViewById(R.id.editor_add_another_image).setOnClickListener(this);
+        view.findViewById(R.id.editor_retake_image).setOnClickListener(this);
+        view.findViewById(R.id.editor_finish).setOnClickListener(this);
+    }
+
+    public interface EditorFragmentListener {
+        void callCamera();
+        void finishActivity();
+    }
 }
