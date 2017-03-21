@@ -1,12 +1,21 @@
 package com.brufstudios.drivelikescanner.adapters;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryPageAdapter extends PagerAdapter {
 
     public static String IMAGE_NAME = "com.brufstudios.drivelikescanner.CollectedPageAdapter.IMAGE_NAME";
+
+    private Context context;
+    LayoutInflater inflater;
+    List<String> pages = new ArrayList<>();
 
     @Override
     public int getCount() {

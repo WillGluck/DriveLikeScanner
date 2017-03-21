@@ -28,6 +28,15 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        activity.getSupportActionBar().show();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,11 +51,8 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        activity.getSupportActionBar().show();
+    public void setMenuVisibility(boolean menuVisible) {
+        super.setMenuVisibility(menuVisible);
     }
 
     @Override

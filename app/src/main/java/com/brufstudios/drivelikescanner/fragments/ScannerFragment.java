@@ -68,6 +68,7 @@ public class ScannerFragment  extends Fragment implements View.OnClickListener, 
     public void onResume() {
         super.onResume();
         configCamera();
+
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         activity.getSupportActionBar().hide();

@@ -24,16 +24,9 @@ public class DriverLikeActivity extends AppCompatActivity implements ScannerFrag
         if (null == savedInstanceState) {
 
             EditorFragment editorFragment = new EditorFragment();
-
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, new ScannerFragment(), Constants.TAG_SCANNER_FRAGMENT)
-                    .commit();
-
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.container, editorFragment, Constants.TAG_EDITOR_FRAGMENT)
-                    .hide(editorFragment)
                     .commit();
         }
     }
@@ -73,8 +66,13 @@ public class DriverLikeActivity extends AppCompatActivity implements ScannerFrag
 
     private void showEditorFragment(String fileName) {
 
-        EditorFragment editorFragment = getEditorFragment();
         FragmentManager manager = getSupportFragmentManager();
+        EditorFragment editorFragment = getEditorFragment();
+
+        if (null == editorFragment) {
+            editorFragment = new EditorFragment();
+            manager.beginTransaction().add(R.id.container, editorFragment, Constants.TAG_EDITOR_FRAGMENT).hide(editorFragment).commit();
+        }
 
         manager.beginTransaction().remove(getScannerFragment()).show(editorFragment).addToBackStack(null).commit();
 
