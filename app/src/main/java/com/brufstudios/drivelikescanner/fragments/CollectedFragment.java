@@ -21,6 +21,8 @@ public class CollectedFragment extends Fragment {
     private static String SAVED_FILE_NAME_LIST = "bundleFileNameList";
     private static String SAVED_SELECTED_FILE = "bundleSelectedFile";
 
+    public static String PARAM_IMAGE_NAME = "com.brufstudios.drivelikescanner.CollectedFragment.IMAGE_NAME";
+
     private CollectedFragmentListener listener;
     private List<String> files;
     private String selectedFile;
@@ -38,6 +40,15 @@ public class CollectedFragment extends Fragment {
             selectedFile = savedInstanceState.getString(SAVED_SELECTED_FILE);
         } else {
             files = new ArrayList<>();
+            selectedFile = null;
+        }
+
+        if (null != getArguments() && getArguments().containsKey(PARAM_IMAGE_NAME)) {
+            if (0 < files.size()) {
+                replaceSelectedImage(getArguments().getString(PARAM_IMAGE_NAME));
+            } else {
+
+            }
         }
     }
 
@@ -81,29 +92,47 @@ public class CollectedFragment extends Fragment {
     }
 
     public void addNewImage(String fileName) {
-
+        //TODO
     }
 
     public void replaceSelectedImage(String fileName) {
-
+        //TODO
     }
+
+    private void removeSelectedImage() {
+        //TODO
+    }
+
+    private void rotateSelectedImage() {
+        //TODO
+    }
+
+    private void editSelectedImage() {
+        //TODO
+    }
+
     public List<String> getFiles() {
         return files;
+    }
+
+    public String getSelectedFile() {
+        return selectedFile;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.collected_crop:
-                listener.editFileWithName("teste");
+                listener.editFileWithName(selectedFile);
                 break;
             case R.id.collected_edit:
+                editSelectedImage();
                 break;
             case R.id.collected_remove:
-                break;
-            case R.id.collected_rename:
+                removeSelectedImage();
                 break;
             case R.id.collected_rotate:
+                rotateSelectedImage();
                 break;
             default:
                 return super.onOptionsItemSelected(item);

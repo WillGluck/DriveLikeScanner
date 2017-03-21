@@ -28,6 +28,33 @@ public class EditorActivity extends AppCompatActivity implements EditorFragment.
     private static String COLLECTED_TAG = "com.brufstudios.drivelikescanner.CollectedTag";
     private static String EDITOR_TAG = "com.brufstudios.drivelikescanner.EditorTag";
 
+    private static String SAVED_SELECTED_FRAGMENT = "bundleSelectedFragment";
+
+    private EnumSelectedFragment selectedFragment = null;
+
+    private enum EnumSelectedFragment {
+
+        COLLECTED(0), EDITOR(1);
+
+        private Integer value;
+
+        EnumSelectedFragment(Integer value) {
+            this.value = value;
+        }
+        public Integer getValue() {
+            return value;
+        }
+
+        public EnumSelectedFragment getFromValue(Integer value) {
+            if (COLLECTED.getValue().equals(value)) {
+                return COLLECTED;
+            } else if (EDITOR.getValue().equals(value)) {
+                return EDITOR;
+            }
+            return null;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +62,12 @@ public class EditorActivity extends AppCompatActivity implements EditorFragment.
         setContentView(R.layout.activity_drive_like_editor);
         configActivity();
 
-        loadCollectedFragment();
-
+        if (null == savedInstanceState) {
+            loadCollectedFragment(getIntent().getStringExtra(PARAM_IMAGE_NAME));
+            selectedFragment = EnumSelectedFragment.COLLECTED;
+        } else {
+            selectedFragment = EnumSelectedFragment.COLLECTED.getFromValue(savedInstanceState.getInt(SAVED_SELECTED_FRAGMENT));
+        }
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -50,6 +81,7 @@ public class EditorActivity extends AppCompatActivity implements EditorFragment.
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SAVED_SELECTED_FRAGMENT, selectedFragment.getValue());
         super.onSaveInstanceState(outState);
     }
 
@@ -69,15 +101,20 @@ public class EditorActivity extends AppCompatActivity implements EditorFragment.
         findViewById(R.id.editor_finish).setOnClickListener(this);
     }
 
-    private void loadCollectedFragment() {
-        loadFragment(new CollectedFragment(), COLLECTED_TAG);
+    private void loadCollectedFragment(String fileName) {
+        loadFragment(new CollectedFragment(), COLLECTED_TAG, fileName, CollectedFragment.PARAM_IMAGE_NAME);
     }
 
-    private void loadEditorFragment() {
-        loadFragment(new EditorFragment(), EDITOR_TAG);
+    private void loadEditorFragment(String fileName) {
+        loadFragment(new EditorFragment(), EDITOR_TAG, fileName, EditorFragment.PARAM_IMAGE_NAME);
     }
 
-    private void loadFragment(Fragment fragment, String TAG) {
+    private void loadFragment(Fragment fragment, String TAG, String fileName, String paramName) {
+        if (null != fileName) {
+            Bundle extras = new Bundle();
+            extras.putString(paramName, fileName);
+            fragment.setArguments(extras);
+        }
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragmentContainer, fragment, TAG);
@@ -91,8 +128,6 @@ public class EditorActivity extends AppCompatActivity implements EditorFragment.
             case android.R.id.home:
                 //Start activity
                 return true;
-            case R.id.collected_crop:
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -152,12 +187,12 @@ public class EditorActivity extends AppCompatActivity implements EditorFragment.
     private void finishActivity() {
         Intent intent = getIntent();
         intent.putStringArrayListExtra(PARAM_IMAGE_NAME_LIST, (ArrayList<String>) getCollectedFragment().getFiles());
-        setResult(RESULT_OK);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
     public void editFileWithName(String fileName) {
-        loadEditorFragment();
+        loadEditorFragment(fileName);
     }
 }

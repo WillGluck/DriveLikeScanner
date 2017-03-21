@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (DIGITALIZAR == requestCode && RESULT_OK == resultCode) {
             //TODO pega resultado
+
         }
     }
 }
