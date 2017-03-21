@@ -7,15 +7,26 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.brufstudios.drivelikescanner.R;
+import com.brufstudios.drivelikescanner.adapters.GalleryPageAdapter;
 
 public class EditorFragment extends Fragment implements View.OnClickListener {
 
     private View view;
     private EditorFragmentListener listener;
+    private GalleryPageAdapter adapter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -23,6 +34,11 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.fragment_editor, container, false);
         configFragment();
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -35,6 +51,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        outState.putString("asd", "asd");
         super.onSaveInstanceState(outState);
     }
 
@@ -67,6 +84,60 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
                 listener.finishActivity();
                 break;
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_editor, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_cofigurations:
+                configurations();
+                break;
+            case R.id.menu_crop:
+                crop();
+                break;
+            case R.id.menu_edit:
+                edit();
+                break;
+            case R.id.menu_remove:
+                remove();
+                break;
+            case R.id.menu_rename:
+                rename();
+                break;
+            case R.id.menu_rotate:
+                rotate();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void configurations() {
+
+    }
+
+    private void crop() {
+
+    }
+
+    private void edit() {
+
+    }
+
+    private void remove() {
+
+    }
+
+    private void rename() {
+
+    }
+
+    private void rotate() {
+
     }
 
     private void configFragment() {

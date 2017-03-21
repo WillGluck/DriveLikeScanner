@@ -4,7 +4,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class CollectedPageAdapter extends PagerAdapter {
+public class GalleryPageAdapter extends PagerAdapter {
 
     public static String IMAGE_NAME = "com.brufstudios.drivelikescanner.CollectedPageAdapter.IMAGE_NAME";
 
