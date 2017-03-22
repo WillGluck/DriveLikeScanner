@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,15 +13,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.brufstudios.drivelikescanner.R;
 import com.brufstudios.drivelikescanner.adapters.GalleryPageAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditorFragment extends Fragment implements View.OnClickListener {
 
     private View view;
     private EditorFragmentListener listener;
     private GalleryPageAdapter adapter;
+    private ViewPager pager;
+    List<String> filesNames = new ArrayList<>();
+    private Boolean isWaitingForNewImage = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,10 +39,6 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-        activity.getSupportActionBar().show();
     }
 
     @Nullable
@@ -51,14 +55,19 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void setMenuVisibility(boolean menuVisible) {
-        super.setMenuVisibility(menuVisible);
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("asd", "asd");
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+            activity.getSupportActionBar().show();
+        }
     }
 
     @Override
@@ -81,9 +90,11 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.editor_add_another_image:
+                isWaitingForNewImage = true;
                 listener.callCamera();
                 break;
             case R.id.editor_retake_image:
+                isWaitingForNewImage = false;
                 listener.callCamera();
                 break;
             case R.id.editor_finish:
@@ -122,38 +133,54 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
         return super.onOptionsItemSelected(item);
     }
 
-    private void configurations() {
+    public void addFileName(String imageName) {
+        if (isWaitingForNewImage) {
+            adapter.addFileName(imageName);
+            pager.setCurrentItem(pager.getCurrentItem() + 1);
+        } else {
+            adapter.replaceFileNameForIndex(pager.getCurrentItem(), imageName);
+        }
+    }
 
+    private void configurations() {
+        Toast.makeText(getContext(), "Não implementado ainda", Toast.LENGTH_SHORT).show();
     }
 
     private void crop() {
-
+        Toast.makeText(getContext(), "Não implementado ainda", Toast.LENGTH_SHORT).show();
     }
 
     private void edit() {
-
+        Toast.makeText(getContext(), "Não implementado ainda", Toast.LENGTH_SHORT).show();
     }
 
     private void remove() {
-
+        adapter.removeFileName(pager.getCurrentItem());
     }
 
     private void rename() {
-
+        Toast.makeText(getContext(), "Não implementado ainda", Toast.LENGTH_SHORT).show();
     }
 
     private void rotate() {
-
+        Toast.makeText(getContext(), "Não implementado ainda", Toast.LENGTH_SHORT).show();
     }
 
     private void configFragment() {
         loadListeners();
+        configGallery();
     }
 
     private void loadListeners() {
         view.findViewById(R.id.editor_add_another_image).setOnClickListener(this);
         view.findViewById(R.id.editor_retake_image).setOnClickListener(this);
         view.findViewById(R.id.editor_finish).setOnClickListener(this);
+    }
+
+    private void configGallery() {
+        pager = (ViewPager) view.findViewById(R.id.galleryPager);
+        adapter = new GalleryPageAdapter(getContext(), filesNames);
+        pager.setAdapter(adapter);
     }
 
     public interface EditorFragmentListener {

@@ -26,6 +26,8 @@ public class DriverLikeActivity extends AppCompatActivity implements ScannerFrag
             EditorFragment editorFragment = new EditorFragment();
             getSupportFragmentManager()
                     .beginTransaction()
+                    .add(R.id.container, editorFragment, Constants.TAG_EDITOR_FRAGMENT)
+                    .hide(editorFragment)
                     .add(R.id.container, new ScannerFragment(), Constants.TAG_SCANNER_FRAGMENT)
                     .commit();
         }
@@ -69,20 +71,14 @@ public class DriverLikeActivity extends AppCompatActivity implements ScannerFrag
         FragmentManager manager = getSupportFragmentManager();
         EditorFragment editorFragment = getEditorFragment();
 
-        if (null == editorFragment) {
-            editorFragment = new EditorFragment();
-            manager.beginTransaction().add(R.id.container, editorFragment, Constants.TAG_EDITOR_FRAGMENT).hide(editorFragment).commit();
-        }
-
-        manager.beginTransaction().remove(getScannerFragment()).show(editorFragment).addToBackStack(null).commit();
+        manager.beginTransaction().remove(getScannerFragment()).show(editorFragment).commit();
 
         if (2 == manager.getBackStackEntryCount()) {
             manager.popBackStack();
             manager.popBackStack();
         }
 
-        //TODO adiciona nova imagem
-
+        editorFragment.addFileName(fileName);
     }
 
 }

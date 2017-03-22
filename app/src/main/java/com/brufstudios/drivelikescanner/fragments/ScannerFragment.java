@@ -129,13 +129,13 @@ public class ScannerFragment  extends Fragment implements View.OnClickListener, 
             listener.handleInternalImageWithName(fileName);
 
         } catch (Exception e) {
-            Log.e(Constants.TAG, getString(R.string.error_msg_saving_temp_file, e.getMessage()));
+            Log.e(Constants.TAG, getString(R.string.error_msg_saving_temp_file, e.getStackTrace()));
         }  finally {
             try {
                 if (null != fos)
                     fos.close();
             } catch (IOException e) {
-                Log.e(Constants.TAG, getString(R.string.error_msg_closing_file_output_stream, e.getMessage()));
+                Log.e(Constants.TAG, getString(R.string.error_msg_closing_file_output_stream, e.getStackTrace()));
             }
         }
     }
