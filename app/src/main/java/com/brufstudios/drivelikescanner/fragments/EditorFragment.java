@@ -154,6 +154,9 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
 
     private void remove() {
         pagerController.removeCurrentFileName();
+        if (0 == pagerController.getCount()) {
+            listener.finishActivity();
+        }
     }
 
     private void rename() {
