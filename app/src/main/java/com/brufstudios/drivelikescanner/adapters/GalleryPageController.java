@@ -26,12 +26,12 @@ public class GalleryPageController extends PagerAdapter {
     ViewPager pager;
     List<String> filesNames = new ArrayList<>();
 
-    public GalleryPageController(@NonNull Context context, @NonNull List<String> filesNames, ViewPager pager) {
+    public GalleryPageController(@NonNull Context context, ViewPager pager) {
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.pager = pager;
         this.pager.setAdapter(this);
-        this.filesNames = filesNames;
+        this.filesNames = new ArrayList<>();
     }
 
     @Override

@@ -18,14 +18,10 @@ import android.widget.Toast;
 import com.brufstudios.drivelikescanner.R;
 import com.brufstudios.drivelikescanner.adapters.GalleryPageController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EditorFragment extends Fragment implements View.OnClickListener {
 
     private View view;
     private EditorFragmentListener listener;
-    List<String> filesNames = new ArrayList<>();
     private GalleryPageController pagerController;
     private Boolean isWaitingForNewImage = true;
 
@@ -33,11 +29,6 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Nullable
@@ -179,7 +170,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     private void configGallery() {
-        pagerController = new GalleryPageController(getContext(), filesNames, (ViewPager) view.findViewById(R.id.galleryPager));
+        pagerController = new GalleryPageController(getContext(), (ViewPager) view.findViewById(R.id.galleryPager));
     }
 
     public interface EditorFragmentListener {

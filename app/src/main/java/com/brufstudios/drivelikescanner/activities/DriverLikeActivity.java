@@ -51,7 +51,7 @@ public class DriverLikeActivity extends AppCompatActivity implements ScannerFrag
 
     @Override
     public void finishActivity() {
-
+        finish();
     }
 
     private EditorFragment getEditorFragment() {
