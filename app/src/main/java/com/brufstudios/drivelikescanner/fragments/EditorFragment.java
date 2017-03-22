@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.brufstudios.drivelikescanner.R;
-import com.brufstudios.drivelikescanner.adapters.GalleryPageAdapter;
+import com.brufstudios.drivelikescanner.adapters.GalleryPageController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +25,8 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
 
     private View view;
     private EditorFragmentListener listener;
-    private GalleryPageAdapter adapter;
-    private ViewPager pager;
     List<String> filesNames = new ArrayList<>();
+    private GalleryPageController pagerController;
     private Boolean isWaitingForNewImage = true;
 
     @Override
@@ -135,10 +134,9 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
 
     public void addFileName(String imageName) {
         if (isWaitingForNewImage) {
-            adapter.addFileName(imageName);
-            pager.setCurrentItem(pager.getCurrentItem() + 1);
+            pagerController.addFileName(imageName);
         } else {
-            adapter.replaceFileNameForIndex(pager.getCurrentItem(), imageName);
+            pagerController.replaceCurrentFileName(imageName);
         }
     }
 
@@ -155,7 +153,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     private void remove() {
-        adapter.removeFileName(pager.getCurrentItem());
+        pagerController.removeCurrentFileName();
     }
 
     private void rename() {
@@ -178,9 +176,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     }
 
     private void configGallery() {
-        pager = (ViewPager) view.findViewById(R.id.galleryPager);
-        adapter = new GalleryPageAdapter(getContext(), filesNames);
-        pager.setAdapter(adapter);
+        pagerController = new GalleryPageController(getContext(), filesNames, (ViewPager) view.findViewById(R.id.galleryPager));
     }
 
     public interface EditorFragmentListener {
