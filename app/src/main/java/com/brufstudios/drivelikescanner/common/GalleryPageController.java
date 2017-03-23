@@ -1,4 +1,4 @@
-package com.brufstudios.drivelikescanner.adapters;
+package com.brufstudios.drivelikescanner.common;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -104,5 +104,9 @@ public class GalleryPageController extends PagerAdapter {
         String removedFileName = filesNames.remove(currentItem.intValue());
         getFileFromName(removedFileName).delete();
         notifyDataSetChanged();
+    }
+
+    public Bitmap getSelectedImage() {
+        return BitmapFactory.decodeFile(getFileFromName(filesNames.get(pager.getCurrentItem())).getPath());
     }
 }
