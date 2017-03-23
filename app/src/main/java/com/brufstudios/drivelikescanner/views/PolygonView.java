@@ -252,7 +252,8 @@ public class PolygonView extends FrameLayout {
     }
 
     public boolean isValidShape(Map<Integer, PointF> pointFMap) {
-        return pointFMap.size() == 4;
+        //return pointFMap.size() == 4;
+        return true;
     }
 
     private class TouchListenerImpl implements OnTouchListener {
