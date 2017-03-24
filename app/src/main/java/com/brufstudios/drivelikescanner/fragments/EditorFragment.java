@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.brufstudios.drivelikescanner.R;
 import com.brufstudios.drivelikescanner.common.GalleryPageController;
+import com.brufstudios.drivelikescanner.views.PolygonCanvas;
 import com.brufstudios.drivelikescanner.views.PolygonView;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
     private View view;
     private EditorFragmentListener listener;
     private GalleryPageController pagerController;
-    private PolygonView polygonView;
+    private PolygonCanvas polygonView;
     private Boolean isWaitingForNewImage = true;
 
     @Override
@@ -162,7 +163,7 @@ public class EditorFragment extends Fragment implements View.OnClickListener {
         view.findViewById(R.id.galleryContainer).setVisibility(View.GONE);
         view.findViewById(R.id.editorContainer).setVisibility(View.VISIBLE);
 
-        polygonView = (PolygonView) view.findViewById(R.id.editorPolygons);
+        polygonView = (PolygonCanvas) view.findViewById(R.id.editorPolygons);
         ImageView sourceImageView = (ImageView) view.findViewById(R.id.editorImage);
         FrameLayout sourceFrame = (FrameLayout) view.findViewById(R.id.editorImageContainer);
 
